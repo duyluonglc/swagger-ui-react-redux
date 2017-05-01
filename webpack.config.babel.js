@@ -3,12 +3,13 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import { HotModuleReplacementPlugin } from 'webpack'
 
 const defaultEnv = {
-  dev: true,
+  development: true,
   production: false
 }
 
 export default (env = defaultEnv) => ({
   entry: [
+    'babel-polyfill',
     ...env.dev ? [
       'react-hot-loader/patch',
       'webpack-dev-server/client?http://localhost:8080'
@@ -26,7 +27,7 @@ export default (env = defaultEnv) => ({
     ] : [],
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: path.join(__dirname, 'src/template/index.html')
+      template: path.join(__dirname, 'src/Template/index.html')
     })
   ],
   module: {
