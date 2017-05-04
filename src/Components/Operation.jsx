@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 // import * as actions from 'pathToActions';
 import Parameters from './Parameters'
-import Markdown from 'react-remarkable'
+import Markdown from 'react-markdown'
 import Scroll from 'react-scroll'
 
 const Element = Scroll.Element
@@ -39,7 +39,7 @@ class Operation extends React.Component {
                 {description &&
                   <div className='opblock-description-wrapper'>
                     <div className='opblock-description'>
-                      <Markdown options={{ html: true, typographer: true, linkify: true, linkTarget: '_blank' }} source={description} />
+                      <Markdown source={description || ''} />
                     </div>
                   </div>
                 }
