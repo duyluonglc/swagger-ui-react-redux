@@ -53,6 +53,32 @@ export default (env = defaultEnv) => ({
       {
         test: /\.(css|scss|sass)$/,
         use: ['style-loader', 'css-loader?modules', 'sass-loader']
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loaders: [
+          'file-loader',
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              query: {
+                mozjpeg: {
+                  progressive: true
+                },
+                gifsicle: {
+                  interlaced: false
+                },
+                optipng: {
+                  optimizationLevel: 7
+                },
+                pngquant: {
+                  quality: '75-90',
+                  speed: 4
+                }
+              }
+            }
+          }
+        ]
       }
     ]
   },

@@ -1,0 +1,23 @@
+@mixin text_body($color: #3b4151)
+{
+    font-family: Avenir Next,avenir-next-web,Avenir,Helvetica Neue,Hevetica,sans-serif;
+    font-size: 14px;
+
+    color: $color;
+}
+
+@mixin text_code($color: #3b4151)
+{
+    font-family: Roboto Mono,Menlo,Monaco,Consolas,Courier New,monospace;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 24px;
+    color: $color;
+}
+
+@mixin text_headline($color: #3b4151)
+{
+    font-family: Avenir Next,avenir-next-web,Avenir,Helvetica Neue,Hevetica,sans-serif;
+    color: $color;
+}
+
