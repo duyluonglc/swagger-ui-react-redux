@@ -16,6 +16,15 @@ class Sidebar extends React.Component {
     }
   }
 
+  componentDidMount () {
+    setTimeout(function () {
+      scroll.scrollTo(window.location.hash.substr(1), {
+        duration: 500,
+        smooth: true
+      })
+    }, 500)
+  }
+
   toggleCollapse (tagName) {
     const openTags = this.state.openTags
     openTags[tagName] = !openTags[tagName]
@@ -32,7 +41,7 @@ class Sidebar extends React.Component {
 
   render () {
     return (
-      <div className='row sidebar'>
+      <div className='row side-bar'>
         <h5>Security</h5>
         <h5>API Reference</h5>
         <ul>

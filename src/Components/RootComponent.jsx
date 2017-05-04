@@ -42,10 +42,12 @@ class RootComponent extends React.Component {
                   </div>
 
                   <div className='row'>
-                    <div className='col-sm-12 col-md-3' >
-                      <Sidebar />
+                    <div className='col-md-3' >
+                      <Sticky>
+                        {() => <Sidebar />}
+                      </Sticky>
                     </div>
-                    <div className='col-sm-12 col-md-3' >
+                    <div className='col-md-9' >
                       <Operations />
                     </div>
                   </div>

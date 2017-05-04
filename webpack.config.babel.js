@@ -52,7 +52,7 @@ export default (env = defaultEnv) => ({
       },
       {
         test: /\.(css|scss|sass)$/,
-        use: ['style-loader', 'css-loader?modules', 'sass-loader']
+        use: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
