@@ -1,8 +1,12 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+// import { bindActionCreators } from 'redux'
 // import * as actions from 'pathToActions';
 import Parameters from './Parameters'
+import Schemes from './Schemes'
+import Execute from './Execute'
+import Clear from './Clear'
+import Responses from './Responses'
 import Markdown from 'react-markdown'
 import Scroll from 'react-scroll'
 
@@ -10,11 +14,22 @@ const Element = Scroll.Element
 class Operation extends React.Component {
   constructor (props, context) {
     super(props, context)
+    this.state = {}
   }
 
   render () {
-    const { operation, tag, responses, schemes } = this.props
-    const { method, deprecated, path, summary, description, externalDocs, parameters } = operation
+    const { operation, tag, schemes } = this.props
+    const {
+      method,
+      deprecated,
+      path,
+      summary,
+      description,
+      externalDocs,
+      parameters,
+      response,
+      responses
+    } = operation
     const key = `${tag.name}_${operation.method}_${operation.path.replace(/[/\-{}]/g, '_')}`
     return (
       <Element name={key} className={deprecated ? 'opblock opblock-deprecated' : `opblock opblock-${method} is-open`} >
@@ -55,34 +70,30 @@ class Operation extends React.Component {
                 }
                 <Parameters
                   parameters={parameters}
+                  operation={operation}
                   pathMethod={[path, method]}
                 />
 
-                {schemes && schemes.size ? <div className='opblock-schemes'>
-                  <Schemes schemes={schemes}
-                    path={path}
-                    method={method}
-                    specActions={specActions} />
-                </div> : null}
-                {/*
-
-                <div className={(!tryItOutEnabled || !response || !allowTryItOut) ? 'execute-wrapper' : 'btn-group'}>
-                  {!tryItOutEnabled || !allowTryItOut ? null
-
-                    : <Execute
-                      getComponent={getComponent}
-                      operation={operation}
-                      specActions={specActions}
-                      specSelectors={specSelectors}
+                {schemes && schemes.length
+                  ? <div className='opblock-schemes'>
+                    <Schemes schemes={schemes}
                       path={path}
                       method={method}
-                      onExecute={this.onExecute} />
-                  }
+                    />
+                  </div>
+                  : null
+                }
 
-                  {(!tryItOutEnabled || !response || !allowTryItOut) ? null
+                <div className={!response ? 'execute-wrapper' : 'btn-group'}>
+                  <Execute
+                    operation={operation}
+                    path={path}
+                    method={method}
+                    onExecute={this.onExecute} />
+
+                  {!response ? null
                     : <Clear
                       onClick={this.onClearClick}
-                      specActions={specActions}
                       path={path}
                       method={method} />
                   }
@@ -99,7 +110,6 @@ class Operation extends React.Component {
                     </div>
                 }
 
-                */}
               </div>
 
             </div>
@@ -107,15 +117,8 @@ class Operation extends React.Component {
               {!responses ? null
                 : <Responses
                   responses={responses}
-                  request={request}
-                  tryItOutResponse={response}
-                  getComponent={getComponent}
-                  specSelectors={specSelectors}
-                  specActions={specActions}
-                  produces={produces}
-                  producesValue={operation.get('produces_value')}
-                  pathMethod={[path, method]}
-                  fn={fn} />
+                  operation={operation}
+                />
               }
             </div>
 
@@ -136,6 +139,7 @@ Operation.propTypes = {
 
 function mapStateToProps (state, ownProps) {
   return {
+    schemes: state.spec.schemes
   }
 }
 

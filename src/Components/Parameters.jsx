@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+// import { bindActionCreators } from 'redux'
 // import * as actions from 'pathToActions';
 import ParameterRow from './ParameterRow'
 class Parameters extends React.Component {
@@ -9,7 +9,8 @@ class Parameters extends React.Component {
   }
 
   render () {
-    const { parameters } = this.props
+    const { operation } = this.props
+    const { parameters } = operation
     return (
       <div className='opblock-section'>
         <div className='opblock-section-header'>
@@ -21,7 +22,7 @@ class Parameters extends React.Component {
             <table className='parameters'>
               <tbody>
                 {parameters.map(parameter => (
-                  <ParameterRow key={parameter.name} parameter={parameter} />
+                  <ParameterRow key={parameter.name} parameter={parameter} operation={operation} />
                 ))}
               </tbody>
             </table>

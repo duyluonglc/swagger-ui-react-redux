@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+// import { bindActionCreators } from 'redux'
 // import win from 'core/window'
 import Markdown from 'react-markdown'
+import { fromJS } from 'immutable'
 import ParamBody from './ParamBody'
+import ModelExample from './ModelExample'
 // import * as actions from 'pathToActions';
 class ParameterRow extends React.Component {
   constructor (props, context) {
@@ -11,13 +13,14 @@ class ParameterRow extends React.Component {
   }
 
   render () {
-    const { parameter, schema } = this.props
-    const { required, name, type, itemType, description } = parameter
+    const { parameter, operation } = this.props
+    const { required, name, type, itemType, description, schema } = parameter
     const inType = parameter.in
     const isFormData = parameter.in === 'formData'
     const isFormDataSupported = true // 'FormData' in win
     const isExecute = false
-    const bodyParam = inType !== 'body' ? null : <ParamBody param={parameter} />
+    const bodyParam = inType !== 'body' ? null
+      : <ParamBody parameter={parameter} operation={operation} />
     return (
       <tr>
         <td className='col parameters-col_name'>
@@ -30,23 +33,12 @@ class ParameterRow extends React.Component {
         </td>
 
         <td className='col parameters-col_description'>
-
-          {bodyParam || !isExecute ? null
-            : <JsonSchemaForm
-              value={value}
-              required={required}
-              description={param.get('description') ? `${param.get('name')} - ${param.get('description')}` : `${param.get('name')}`}
-              onChange={this.onChangeWrapper}
-              schema={parameter} />
-          }
-
-          {
-            bodyParam && schema ? <ModelExample getComponent={getComponent}
+          {bodyParam && schema
+            ? <ModelExample
               isExecute={isExecute}
-              specSelectors={specSelectors}
-              schema={schema}
+              schema={fromJS(schema)}
               example={bodyParam} />
-              : null
+            : null
           }
 
           <Markdown source={description || ''} />

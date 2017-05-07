@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+// import { bindActionCreators } from 'redux'
 // import win from 'core/window'
-import Markdown from 'react-markdown'
+import ContentType from './ContentType'
+import HighlightCode from './HighlightCode'
 import AceEditor from 'react-ace'
 
 import 'brace/mode/json'
@@ -13,14 +14,23 @@ class ParamBody extends React.Component {
   constructor (props, context) {
     super(props, context)
     this.state = {
-      isEditBox: false
+      isEditBox: false,
+      value: ''
     }
+
+    this.toggleIsEditBox = this.toggleIsEditBox.bind(this)
+  }
+
+  toggleIsEditBox () {
+    this.setState({isEditBox: true})
   }
 
   render () {
-    const { isExecute, isXml } = this.props
+    const { parameter, operation } = this.props
+    const isXml = parameter.contentType === 'application/xml'
     let { value, isEditBox } = this.state
     let mode = isXml ? 'xml' : 'json'
+    const sample = isXml ? parameter.sampleXML : JSON.stringify(parameter.sampleJSON, null, 2)
     let options = {
       autoScrollEditorIntoView: true,
       highlightGutterLine: true,
@@ -31,31 +41,34 @@ class ParamBody extends React.Component {
     }
     return (
       <div className='body-param'>
-        {
-          isEditBox
-            ? <AceEditor
-              value={value}
-              onChange={this.handleOnChange}
-              mode={mode}
-              theme='github'
-              width='auto'
-              height={this.editorPlace ? this.editorPlace.clientHeight : 200}
-              fontSize={14}
-              useSoftTabs
-              tabSize={2}
-              lineHeight={2}
-              style={styles}
-              editorProps={options} />
-            : (value &&
-              <div ref={editorPlace => { this.editorPlace = editorPlace }} className='editor-place' onClick={this.toggleIsEditBox}>
-                <Markdown source={value} />
-              </div>)
+        {isEditBox
+          ? <AceEditor
+            value={value || sample}
+            onChange={this.handleOnChange}
+            onBlur={this.onEditorBlur}
+            mode={mode}
+            theme='github'
+            width='auto'
+            height={this.editorPlace ? this.editorPlace.clientHeight + 'px' : '200px'}
+            fontSize={14}
+            useSoftTabs
+            tabSize={2}
+            lineHeight={2}
+            style={styles}
+            editorProps={options} />
+          : (sample &&
+            <div ref={editorPlace => { this.editorPlace = editorPlace }}
+              className='editor-place'
+              onClick={this.toggleIsEditBox}
+            >
+              <HighlightCode source={sample} className='body-param__example' />
+            </div>)
         }
         <div className='body-param-options'>
 
           <label htmlFor=''>
             <span>Parameter content type</span>
-            <ContentType value={consumesValue} contentTypes={consumes} onChange={onChangeConsumes} className='body-param-content-type' />
+            <ContentType parameter={parameter} operation={operation} className='body-param-content-type' />
           </label>
         </div>
 
